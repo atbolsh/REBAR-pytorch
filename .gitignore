@@ -4,3 +4,4 @@ rebar/data/
 rebar/*.pyc
 data/
 data-windows/
+results.png

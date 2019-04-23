@@ -401,7 +401,7 @@ if __name__ == '__main__':
 
             # training objective
             lhat = sbn_outs['hardELBO'].mean().detach()
-            lHats.append(lhat.data[0])
+            lHats.append(lhat.data.item())
             # baseline loss
             #baseline_y = baseline_loss(baseline_out, sbn_outs['hardELBO'].detach())
 
@@ -411,7 +411,7 @@ if __name__ == '__main__':
             ema_first_moment = (beta * ema_first_moment) + (1 - beta) * first_moment
             ema_second_moment = (beta * ema_second_moment) + (1 - beta) * second_moment
             log_grad_variance = torch.log((ema_second_moment.mean() - (ema_first_moment.mean()) ** 2))
-            log_grad_variances.append(log_grad_variance.data[0])
+            log_grad_variances.append(log_grad_variance.data.item())
 
             sbn_opt.zero_grad()
 
@@ -428,12 +428,12 @@ if __name__ == '__main__':
             if step % log_every == 0: 
                 #print('NVIL grads')
                 #for f in f_grads:
-                #    print(f.shape, f.mean().data[0], f.var().data[0])
+                #    print(f.shape, f.mean().data.item(), f.var().data.item())
                 #print('Concrete grads')
                 #for h in h_grads:
-                #    print(h.shape, h.mean().data[0], h.var().data[0])
-                print('step: {}, training objective (ELBO): {}, logGradVar: {}'.format(step, lhat.data[0], log_grad_variance.data[0]))
-                print('grad ema first moment: {}'.format(ema_first_moment.mean().data[0]))
+                #    print(h.shape, h.mean().data.item(), h.var().data.item())
+                print('step: {}, training objective (ELBO): {}, logGradVar: {}'.format(step, lhat.data.item(), log_grad_variance.data.item()))
+                print('grad ema first moment: {}'.format(ema_first_moment.mean().data.item()))
                 #pdb.set_trace()
             if step % save_every == 0:
                 torch.save(sbn, os.path.join(save_dir, 'sbn-step-{}.pt'.format(step)))
